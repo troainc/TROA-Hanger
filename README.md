@@ -31,7 +31,7 @@ Read the complete terms in [LICENSE.md](LICENSE.md).
 
 ## Installation
 
-1. Download `TROA-Hanger-v2.0.0-alpha.4.37-market-audit-config.zip`.
+1. Download `TROA-Hanger-v2.0.0-alpha.4.37.zip`.
 2. Install the ZIP through Torch's plugin installer. Do not unzip it into the Space Engineers client.
 3. Restart Torch or reload plugins using your normal server workflow.
 4. TROA-Hanger creates `TROA-Hanger.cfg` on first start.
