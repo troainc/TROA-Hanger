@@ -211,3 +211,14 @@ A Steam ID64 belongs to the player’s Steam account. It does not change when th
 ### Migrating from QC
 
 Use the standalone [QC-to-TROA-Hanger Migrator](QC-to-TROA-Hanger-Migrator-v1.0.0.zip). It previews by default, never moves or deletes Quantum Hangar files, copies eligible player grid files only when `--copy` is supplied, creates compatible TROA catalog records, backs up the existing catalog, and writes a migration report. Files without a clear Steam ID are skipped until the server owner supplies an explicit player-to-Steam-ID mapping.
+
+
+## No UI Required
+
+TROA-Hanger is intentionally **configuration- and command-based**. It does not require a client mod, custom in-game UI, web panel, or separate terminal screen.
+
+- **Server owners:** Manage limits, market rules, economy settings, Discord webhooks, and storage paths through `TROA-Hanger.cfg`; use `!hangeradmin` commands for live administration and recovery.
+- **Players:** Use `!hanger`, `!factionhanger`, and market commands directly in Space Engineers in-game chat.
+- **Why this helps:** No UI dependencies or client installation, fewer post-update compatibility issues, and simpler support across Windows, Linux, AMP, and Wine servers.
+
+This streamlined command-and-config approach keeps TROA-Hanger portable and easy for server administrators to maintain.
