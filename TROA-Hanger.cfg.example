@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TroaHangerConfig>
+  <!-- TROA-Hanger configuration. After editing your installed plugin config, run !hangeradmin reload in-game. -->
+  <!-- Keep Discord webhook URLs private. Do not share them or include them in public releases. -->
+  <!-- CORE STORAGE -->
+  <Enabled>true</Enabled>
+  <!-- Leave blank to use the plugin's default TROA-HangerData folder. -->
+  <StorageRootDirectory></StorageRootDirectory>
+  <EnableTroaStorage>true</EnableTroaStorage>
+  <!-- Cross-server storage is reserved for future support. -->
+  <EnableCrossServerStorage>false</EnableCrossServerStorage>
+  <!-- KEEN GRID STORAGE (OPTIONAL): enable after binding a Keen Services Terminal with !hangeradmin terminalhere. -->
+  <EnableKeenGridStorage>false</EnableKeenGridStorage>
+  <!-- Set automatically by !hangeradmin terminalhere. Leave 0 if disabled. -->
+  <KeenGridStorageTerminalEntityId>0</KeenGridStorageTerminalEntityId>
+  <!-- PLAYER AND GRID LIMITS: set MaxPlayerGrids, MaximumBlocksPerGrid, or MaximumPcuPerGrid to 0 for no limit. -->
+  <MaxPlayerGrids>10</MaxPlayerGrids>
+  <LookTargetDistanceMeters>1000</LookTargetDistanceMeters>
+  <MinimumGridBlocks>25</MinimumGridBlocks>
+  <MaximumBlocksPerGrid>0</MaximumBlocksPerGrid>
+  <MaximumPcuPerGrid>0</MaximumPcuPerGrid>
+  <AllowSmallGrids>true</AllowSmallGrids>
+  <AllowLargeGrids>true</AllowLargeGrids>
+  <AllowStaticGrids>true</AllowStaticGrids>
+  <!-- MARKET -->
+  <EnableMarket>true</EnableMarket>
+  <MarketCommandCooldownSeconds>3</MarketCommandCooldownSeconds>
+  <MaxMarketOffersPerPlayer>3</MaxMarketOffersPerPlayer>
+  <!-- Set false to prevent purchases and credit transfers while keeping listings/bids available. -->
+  <EnableEconomyTransactions>true</EnableEconomyTransactions>
+  <!-- BID TIMERS: live offers use this duration. Use 0 for unlimited live bidding. -->
+  <LiveBidDurationMinutes>1440</LiveBidDurationMinutes>
+  <!-- Timed offers use the seller's requested minutes, constrained by these settings. Use 0 in the command for the default. -->
+  <DefaultTimedBidDurationMinutes>60</DefaultTimedBidDurationMinutes>
+  <MinimumTimedBidDurationMinutes>15</MinimumTimedBidDurationMinutes>
+  <MaximumTimedBidDurationMinutes>10080</MaximumTimedBidDurationMinutes>
+  <!-- OPTIONAL PEAK-HOUR PRICING: buyers pay the listed price plus this percentage during the peak window; sellers receive the listed price. -->
+  <EnablePeakHourMarketPricing>false</EnablePeakHourMarketPricing>
+  <!-- Whole hours, 0 through 23. Example: 18 to 22 is 6 PM through 9:59 PM. -->
+  <PeakHourStart>18</PeakHourStart>
+  <PeakHourEnd>22</PeakHourEnd>
+  <PeakHourPriceIncreasePercent>10</PeakHourPriceIncreasePercent>
+  <!-- Leave blank for server local time. Windows example: Eastern Standard Time. -->
+  <PeakHourTimeZoneId></PeakHourTimeZoneId>
+  <!-- Admin faction that receives the peak-hour surcharge. TRO is created as an NPC faction if missing. -->
+  <PeakHourRevenueFactionTag>TRO</PeakHourRevenueFactionTag>
+  <!-- OPTIONAL STANDALONE DISCORD MARKET WEBHOOK. It does not require TROA Discord Monitor. -->
+  <!-- Paste the complete HTTPS Discord webhook URL below, not only the webhook ID. -->
+  <EnableDiscordMarketWebhook>false</EnableDiscordMarketWebhook>
+  <DiscordMarketWebhookUrl></DiscordMarketWebhookUrl>
+  <DiscordMarketWebhookName>TROA-Hanger</DiscordMarketWebhookName>
+  <!-- MARKET AUDIT WEBHOOK (PRIVATE ADMIN CHANNEL): leave disabled until you paste a complete Discord webhook URL. -->
+  <EnableMarketAuditWebhook>false</EnableMarketAuditWebhook>
+  <MarketAuditWebhookUrl></MarketAuditWebhookUrl>
+  <!-- OPTIONAL ECONOMY FEES (reserved for future use) -->
+  <ChargeForStorage>false</ChargeForStorage>
+  <StorageFeeCredits>0</StorageFeeCredits>
+  <ChargeForRetrieval>false</ChargeForRetrieval>
+  <RetrievalFeeCredits>0</RetrievalFeeCredits>
+</TroaHangerConfig>
