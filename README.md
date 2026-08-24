@@ -192,3 +192,22 @@ Include these when reporting a problem:
 5. A sanitized config with all webhook URLs removed.
 
 Never share webhook URLs, account tokens, private server paths, or player data in public support channels.
+
+
+## QC / Quantum Hangar Migration and Wipe Safety
+
+TROA-Hanger is not a renamed Quantum Hangar install. It has its own storage layout, catalog, commands, and recovery process. The important difference is that direct TROA player grids are stored under the player’s stable Steam ID64:
+
+`PlayersHangers/<SteamID64>/`
+
+A Steam ID64 belongs to the player’s Steam account. It does not change when the server world is wiped, updated, restarted, or moved to another machine. When `TROA-HangerData` is retained or restored from backup, server owners can rebuild the player's hanger catalog with `!hangeradmin recover <steam-id>` or `!hangeradmin recoverall` instead of manually recreating player records.
+
+- Direct TROA storage is designed for Steam-ID-based recovery after catalog issues, crashes, updates, or world wipes.
+- Market files retain seller Steam-ID information so orphaned listings can be returned using `!hangeradmin marketrecover`.
+- Unreadable grid files are quarantined for review rather than deleted.
+- Keen Grid Storage IDs are world-specific and can change after a wipe; use TROA direct storage for wipe-resistant player hanger files.
+- Steam-ID storage improves recovery, but it does not replace backups. Back up `TROA-HangerData` before wipes, major updates, migrations, or storage-path changes.
+
+### Migrating from QC
+
+Use the standalone [QC-to-TROA-Hanger Migrator](QC-to-TROA-Hanger-Migrator-v1.0.0.zip). It previews by default, never moves or deletes Quantum Hangar files, copies eligible player grid files only when `--copy` is supplied, creates compatible TROA catalog records, backs up the existing catalog, and writes a migration report. Files without a clear Steam ID are skipped until the server owner supplies an explicit player-to-Steam-ID mapping.
