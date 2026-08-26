@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TroaHangerConfig>
-  <!-- TROA-Hanger configuration. After editing your installed plugin config, run !hangeradmin reload in-game. -->
+  <!-- TROA-Hangar configuration. After editing your installed plugin config, run !hangeradmin reload in-game. -->
   <!-- Keep Discord webhook URLs private. Do not share them or include them in public releases. -->
   <!-- CORE STORAGE -->
   <Enabled>true</Enabled>
@@ -48,7 +48,7 @@
   <!-- Paste the complete HTTPS Discord webhook URL below, not only the webhook ID. -->
   <EnableDiscordMarketWebhook>false</EnableDiscordMarketWebhook>
   <DiscordMarketWebhookUrl></DiscordMarketWebhookUrl>
-  <DiscordMarketWebhookName>TROA-Hanger</DiscordMarketWebhookName>
+  <DiscordMarketWebhookName>TROA-Hangar</DiscordMarketWebhookName>
   <!-- MARKET AUDIT WEBHOOK (PRIVATE ADMIN CHANNEL): leave disabled until you paste a complete Discord webhook URL. -->
   <EnableMarketAuditWebhook>false</EnableMarketAuditWebhook>
   <MarketAuditWebhookUrl></MarketAuditWebhookUrl>

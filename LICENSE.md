@@ -1,10 +1,10 @@
-# TROA-Hanger Community Use License
+# TROA-Hangar Community Use License
 
 Copyright (c) 2026 TROA.
 
 ## Permission to Use
 
-TROA grants server owners a limited, non-exclusive, non-transferable, revocable permission to install and use the unmodified TROA-Hanger plugin package on Space Engineers servers they operate.
+TROA grants server owners a limited, non-exclusive, non-transferable, revocable permission to install and use the unmodified TROA-Hangar plugin package on Space Engineers servers they operate.
 
 ## What You May Do
 
