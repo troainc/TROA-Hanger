@@ -7,7 +7,7 @@
 > **Platform:** Torch / .NET Framework 4.8  
 > **Hosting:** Windows, Linux, and AMP/Wine-hosted Space Engineers servers
 
-This public repository contains **only** the installable plugin ZIP, a configuration example, and documentation. It contains no source code, server files, player data, tokens, or live webhook URLs. The source project remains private to TROA.
+This public repository contains release documentation, the configuration example, the QC migration tool, and licensing information. The plugin source remains private to TROA, and the current plugin ZIP is distributed separately through TROA-approved release channels. This repository contains no source code, server files, player data, tokens, or live webhook URLs.
 
 ## License and Use
 
@@ -30,12 +30,12 @@ Read the complete terms in [LICENSE.md](LICENSE.md).
 - Standalone Discord market embeds; TROA Discord Monitor is not required.
 - Discord-native live countdowns on both live and timed market cards.
 - Private in-game confirmations from **TROA Market Exchange**, with optional Discord DM embeds.
-- Separate private Market Audit webhook configuration for server-owner auditing.
+- Persistent local market auditing in `TROA-HangerMarketAudit.log`; the audit-webhook settings are reserved and do not send Discord audit embeds in `.4.39`.
 - Path-safe behavior for Windows and Linux/AMP/Wine installations.
 
 ## Installation
 
-1. Download `TROA-Hangar-v2.0.0-alpha.4.39-command-spelling.zip`.
+1. Obtain the approved `TROA-Hangar-v2.0.0-alpha.4.39-command-spelling.zip` release. Verify its SHA-256 against the value at the top of this README.
 2. Install the ZIP through Torch's plugin installer. Do not unzip it into the Space Engineers client.
 3. Restart Torch or reload plugins using your normal server workflow.
 4. TROA-Hangar creates `TROA-Hanger.cfg` on first start.
@@ -76,9 +76,14 @@ Type these in **Space Engineers in-game chat**. Player commands do not require T
 | `!hangar claim <claim-code>` | Deploys a grid purchased from the market. |
 | `!hangar clean` | Repairs your storage catalog and safely quarantines unreadable files. |
 | `!hangar sell <price> <type> <live|timed> <minutes> <description>` | Stores the viewed grid and lists it in one step. |
+| `!hangar market` | Alias for `!hangar market list`. |
 | `!hangar market list` | Shows active offers. |
+| `!hangar market offer <grid-number> <price>` | Lists one of your existing tracked grids; it starts with the default live settings. |
+| `!hangar market details <market-id> <type> <live|timed> <minutes> <description>` | Updates your listing's class, bid mode, duration, and description. |
 | `!hangar bid <market-id> <price>` | Places a bid. |
+| `!hangar market bid <market-id> <price>` | Alias for `!hangar bid`. |
 | `!hangar buy <market-id>` | Buys an active live offer at its buyer total. |
+| `!hangar market buy <market-id>` | Alias for `!hangar buy`. |
 | `!hangar market cancel <market-id>` | Cancels your offer and returns the grid to your hangar. |
 | `!hangar keen list` | Lists optional Keen Grid Storage grids. |
 | `!hangar keen store <name>` | Stores the viewed grid in Keen Grid Storage, when enabled. |
@@ -108,8 +113,11 @@ These commands require Torch administrator permission and are entered in **Space
 | `!hangaradmin help` / `!hangaradmin helper` | Shows the complete server-owner help and workflow. |
 | `!hangaradmin status` | Shows storage, market, economy, and Discord integration status. |
 | `!hangaradmin reload` | Validates and reloads `TROA-Hanger.cfg`. |
+| `!hangar storeid <entity-id> <name>` | Troubleshooting command that stores an owned grid by entity ID. |
+| `!hangar storage` | Shows the resolved player, faction, and market storage folders. |
 | `!hangaradmin terminalhere` | Binds the nearby Keen Services Terminal. |
 | `!hangaradmin terminal <entity-id>` | Binds a Keen Services Terminal by entity ID. |
+| `!hangaradmin keen <true|false>` | Enables or disables optional Keen Grid Storage commands. |
 | `!hangaradmin recover <steam-id>` | Rebuilds one player's catalog from `PlayersHangers`. |
 | `!hangaradmin recoverall` | Rebuilds all player catalog records after a crash or catalog issue. |
 | `!hangaradmin cleanhangar <steam-id>` | Repairs one player catalog and quarantines unreadable files. |
@@ -125,6 +133,7 @@ These commands require Torch administrator permission and are entered in **Space
 | `!hangaradmin limit <count>` | Sets player grid limit. |
 | `!hangaradmin minimumprice <credits>` | Sets the lowest allowed market listing price. |
 | `!hangaradmin listingfee <true|false> <credits>` | Configures optional listing fees. |
+| `!hangaradmin bidminimum <minutes>` | Sets the minimum timed-auction duration within the configured maximum. |
 | `!hangaradmin webhook status` | Shows standalone market webhook status. |
 | `!hangaradmin webhook test` | Sends a test market embed to the configured market webhook. |
 
@@ -136,31 +145,44 @@ Use `TROA-Hangar.cfg.example` as the setup reference. Copy only the settings you
 
 | Setting | Purpose |
 |---|---|
-| `StorageRootDirectory` | Optional storage location; blank uses the default data folder. |
+| `Enabled` | Master plugin enable switch. |
+| `StorageRootDirectory` | Optional storage location; blank uses the default `TROA-HangerData` folder. |
+| `EnableTroaStorage` | Enables normal Steam-ID-based TROA file storage. |
+| `EnableCrossServerStorage` | Reserved for future support; keep `false` in this release. |
+| `EnableKeenGridStorage` / `KeenGridStorageTerminalEntityId` | Enables optional Keen storage and identifies its bound Services Terminal. |
 | `MaxPlayerGrids` | Maximum stored player grids; `0` means unlimited. |
+| `LookTargetDistanceMeters` | Maximum look-target distance used by store and sell commands. |
 | `MinimumGridBlocks` | Minimum blocks required before a grid can be stored. |
 | `MaximumBlocksPerGrid` / `MaximumPcuPerGrid` | Optional caps; `0` means unlimited. |
+| `AllowSmallGrids` / `AllowLargeGrids` / `AllowStaticGrids` | Controls allowed grid sizes and whether stations can be stored. |
 | `EnableMarket` | Enables player listings, bids, and purchases. |
-| `EnableEconomyTransactions` | Enables real economy transfers. |
-| `MinimumTimedBidDurationMinutes` | Lowest allowed timed auction. Set `5` to allow five-minute auctions. |
-| `MaximumTimedBidDurationMinutes` | Highest allowed timed auction. |
+| `MarketCommandCooldownSeconds` | Delay between market commands for each player. |
+| `MaxMarketOffersPerPlayer` | Active offer limit; `0` means unlimited. |
+| `MinimumMarketListingPrice` | Lowest valid listing price. |
+| `ChargeMarketListingFee` / `MarketListingFeeCredits` | Optional listing fee, collected through the native economy. |
+| `EnableEconomyTransactions` | Enables credit transfers and purchases; listings and bids can remain available when disabled. |
+| `LiveBidDurationMinutes` | Lifetime of live buy-now listings; `0` means no live expiry. |
+| `DefaultTimedBidDurationMinutes` | Duration used when a timed seller enters `0`. |
+| `MinimumTimedBidDurationMinutes` / `MaximumTimedBidDurationMinutes` | Allowed seller-selected timed-auction range. |
 | `EnablePeakHourMarketPricing` | Enables buyer-only peak-hour surcharge. |
+| `PeakHourStart` / `PeakHourEnd` | Peak window in whole hours, including start and excluding end. |
+| `PeakHourPriceIncreasePercent` | Percentage added to the buyer total during peak hours. |
+| `PeakHourTimeZoneId` | Blank uses server local time; otherwise supply the host's timezone ID. |
 | `PeakHourRevenueFactionTag` | Revenue faction; it is created as an NPC faction if missing. |
 | `EnableDiscordMarketWebhook` | Enables player-facing standalone Discord market cards. |
 | `DiscordMarketWebhookUrl` | Full Discord webhook URL for the market channel. |
+| `DiscordMarketWebhookName` | Display name used by player-facing market webhook posts. |
 | `EnableMarketInGameConfirmations` | Sends private in-game confirmations from TROA Market Exchange. Enabled by default. |
 | `EnableDiscordMarketDirectMessages` | Enables optional Discord DM confirmation embeds. |
 | `DiscordMarketBotToken` | Bot token used only for optional private Discord messages. Keep it private. |
 | `DiscordMarketPlayerMappings` | Maps players with `SteamID:DiscordUserID` entries. |
-| `EnableMarketAuditWebhook` | Enables the private Market Audit webhook section. |
-| `MarketAuditWebhookUrl` | Full Discord webhook URL for the private admin audit channel. |
+| `EnableMarketAuditWebhook` / `MarketAuditWebhookUrl` | Reserved configuration fields; `.4.39` records local audits but does not deliver Discord audit embeds. |
+| `ChargeForStorage` / `StorageFeeCredits` | Reserved for future use; no storage fee is charged in `.4.39`. |
+| `ChargeForRetrieval` / `RetrievalFeeCredits` | Reserved for future use; no retrieval fee is charged in `.4.39`. |
 
 ### Discord Webhooks
 
-Use a separate webhook destination for each purpose:
-
-- **Market webhook:** player-facing listings, bids, sales, cancellations, and card updates.
-- **Market Audit webhook:** private server-owner channel. Treat this URL as confidential.
+The **market webhook** sends player-facing listings, bids, sales, cancellations, and card updates. `EnableMarketAuditWebhook` and `MarketAuditWebhookUrl` are reserved in `.4.39`; market audit events are written locally to `TROA-HangerMarketAudit.log` and are not sent to Discord by this build.
 
 Paste the complete Discord webhook URL, **not only a webhook ID**. After changing the config, run `!hangaradmin reload`, then `!hangaradmin webhook status`. Run `!hangaradmin webhook test` to validate the player-facing market channel.
 
@@ -179,7 +201,7 @@ TROA-HangerData/
   PlayersHangers/<SteamID>/
   FactionHangers/
   MarketHangers/
-  MarketAudit.log
+  TROA-HangerMarketAudit.log
 ```
 
 - Player storage uses Steam ID folders, helping recovery after catalog problems or world wipes.
@@ -223,7 +245,7 @@ A Steam ID64 belongs to the player’s Steam account. It does not change when th
 - Direct TROA storage is designed for Steam-ID-based recovery after catalog issues, crashes, updates, or world wipes.
 - Market files retain seller Steam-ID information so orphaned listings can be returned using `!hangaradmin marketrecover`.
 - Unreadable grid files are quarantined for review rather than deleted.
-- Keen Grid Storage IDs are world-specific and can change after a wipe; use TROA direct storage for wipe-resistant player hanger files.
+- Keen Grid Storage IDs are world-specific and can change after a wipe; use TROA direct storage for wipe-resistant player hangar files.
 - Steam-ID storage improves recovery, but it does not replace backups. Back up `TROA-HangerData` before wipes, major updates, migrations, or storage-path changes.
 
 ### Migrating from QC
