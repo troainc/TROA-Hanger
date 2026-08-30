@@ -1,8 +1,8 @@
 # TROA-Hangar
 
-**TROA-Hangar** is a server-side Torch plugin for Space Engineers. It gives players a safe grid hangar and marketplace without a client mod or an external Discord bot.
+**TROA-Hangar** is a server-side Torch plugin for Space Engineers. It gives players a safe grid hangar and marketplace without requiring a client mod or external Discord bot. Optional private Discord confirmations can use a configured bot token.
 
-> **Release:** `v2.0.0-alpha.4.37`  
+> **Release:** `v2.0.0-alpha.4.38`
 > **Platform:** Torch / .NET Framework 4.8  
 > **Hosting:** Windows, Linux, and AMP/Wine-hosted Space Engineers servers
 
@@ -19,19 +19,22 @@ Read the complete terms in [LICENSE.md](LICENSE.md).
 - Player-owned grid storage: look at a grid you major-own and store it.
 - Safe retrieval near the player at a clear location.
 - Faction grid storage for faction-owned ships.
-- Market listings, live bids, timed bids, direct purchase, and short claim codes.
+- Buy-now live listings, timed auctions, automatic settlement, and short claim codes.
 - Market custody: listed grid files move into `MarketHangers` until cancelled or purchased.
+- Expired unsold listings return automatically to the seller's Steam-ID hangar.
 - Configurable block, PCU, ownership, grid-size, distance, storage, and market limits.
 - Optional Space Engineers economy transfers and peak-hour buyer surcharge.
 - Steam-ID based storage layout and recovery tools for catalog or crash recovery.
 - Optional Keen Grid Storage Services Terminal support; TROA storage works without it.
 - Standalone Discord market embeds; TROA Discord Monitor is not required.
+- Discord-native live countdowns on both live and timed market cards.
+- Private in-game confirmations from **TROA Market Exchange**, with optional Discord DM embeds.
 - Separate private Market Audit webhook configuration for server-owner auditing.
 - Path-safe behavior for Windows and Linux/AMP/Wine installations.
 
 ## Installation
 
-1. Download `TROA-Hangar-v2.0.0-alpha.4.37.zip`.
+1. Download `TROA-Hangar-v2.0.0-alpha.4.38-market-lifecycle.zip`.
 2. Install the ZIP through Torch's plugin installer. Do not unzip it into the Space Engineers client.
 3. Restart Torch or reload plugins using your normal server workflow.
 4. TROA-Hangar creates `TROA-Hanger.cfg` on first start.
@@ -54,7 +57,7 @@ Read the complete terms in [LICENSE.md](LICENSE.md).
 5. Move to a clear location, then run `!hanger load <number>`.
 6. For a market test, look at another owned grid and run:  
    `!hanger sell 100000 Fighter live 0 "Combat-ready ship"`
-7. A second player can run `!hanger bid <market-id> <price>` or `!hanger buy <market-id>`.
+7. A second player can use `!hanger buy <market-id>` on a live listing, or `!hanger bid <market-id> <price>` on a timed listing.
 8. The buyer moves to a clear area and runs `!hanger claim <claim-code>`.
 
 ## Player Commands
@@ -74,7 +77,7 @@ Type these in **Space Engineers in-game chat**. Player commands do not require T
 | `!hanger sell <price> <type> <live|timed> <minutes> <description>` | Stores the viewed grid and lists it in one step. |
 | `!hanger market list` | Shows active offers. |
 | `!hanger bid <market-id> <price>` | Places a bid. |
-| `!hanger buy <market-id>` | Buys an offer at its buyer total. |
+| `!hanger buy <market-id>` | Buys an active live offer at its buyer total. |
 | `!hanger market cancel <market-id>` | Cancels your offer and returns the grid to your hangar. |
 | `!hanger keen list` | Lists optional Keen Grid Storage grids. |
 | `!hanger keen store <name>` | Stores the viewed grid in Keen Grid Storage, when enabled. |
@@ -87,11 +90,13 @@ Type these in **Space Engineers in-game chat**. Player commands do not require T
 ### Market Behavior
 
 - Every listing has a five-character alphanumeric Market ID, such as `K7X4Q`.
-- Use `live 0` for a live bid; the server uses `LiveBidDurationMinutes`.
-- Use `timed <minutes>` for a timed bid within the owner-configured range. Use `0` for the server default duration.
-- Market cards use green for live, blue for timed, and red for closed listings.
+- Use `live 0` for a buy-now live listing; the server uses `LiveBidDurationMinutes`.
+- Use `timed <minutes>` for a timed auction within the owner-configured range. Use `0` for the server default duration.
+- Live listings can be purchased until their deadline. Timed listings settle the highest valid bid when their timer expires.
+- Unsold or failed listings return to the seller's Steam-ID hangar automatically.
+- Market cards use green for live, blue for timed, and red for closed listings. Discord's relative timestamp visibly counts down in each viewer's local time.
 - When economy is enabled, sellers receive the listed price. Any configured peak surcharge is paid by the buyer and goes to the configured server-owner faction.
-- A listed grid stays in market custody until it is cancelled or bought.
+- A listed grid stays in market custody until it is cancelled, purchased, settled, or returned after expiry.
 
 ## Server Owner Commands
 
@@ -142,6 +147,10 @@ Use `TROA-Hangar.cfg.example` as the setup reference. Copy only the settings you
 | `PeakHourRevenueFactionTag` | Revenue faction; it is created as an NPC faction if missing. |
 | `EnableDiscordMarketWebhook` | Enables player-facing standalone Discord market cards. |
 | `DiscordMarketWebhookUrl` | Full Discord webhook URL for the market channel. |
+| `EnableMarketInGameConfirmations` | Sends private in-game confirmations from TROA Market Exchange. Enabled by default. |
+| `EnableDiscordMarketDirectMessages` | Enables optional Discord DM confirmation embeds. |
+| `DiscordMarketBotToken` | Bot token used only for optional private Discord messages. Keep it private. |
+| `DiscordMarketPlayerMappings` | Maps players with `SteamID:DiscordUserID` entries. |
 | `EnableMarketAuditWebhook` | Enables the private Market Audit webhook section. |
 | `MarketAuditWebhookUrl` | Full Discord webhook URL for the private admin audit channel. |
 
@@ -153,6 +162,12 @@ Use a separate webhook destination for each purpose:
 - **Market Audit webhook:** private server-owner channel. Treat this URL as confidential.
 
 Paste the complete Discord webhook URL, **not only a webhook ID**. After changing the config, run `!hangeradmin reload`, then `!hangeradmin webhook status`. Run `!hangeradmin webhook test` to validate the player-facing market channel.
+
+### Private Market Confirmations
+
+Private in-game confirmations are enabled by default and identify the sender as **TROA Market Exchange**. Buyers, bidders, and sellers receive confirmations for listings, bids, purchases, auction results, cancellations, and expired returns.
+
+Discord DM embeds are optional. A webhook cannot send private messages, so DMs require `EnableDiscordMarketDirectMessages`, `DiscordMarketBotToken`, and `DiscordMarketPlayerMappings`. Use one `SteamID:DiscordUserID` entry per player and never publish the bot token.
 
 ## Storage and Recovery
 

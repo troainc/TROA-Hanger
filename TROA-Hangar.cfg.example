@@ -32,7 +32,7 @@
   <LiveBidDurationMinutes>1440</LiveBidDurationMinutes>
   <!-- Timed offers use the seller's requested minutes, constrained by these settings. Use 0 in the command for the default. -->
   <DefaultTimedBidDurationMinutes>60</DefaultTimedBidDurationMinutes>
-  <MinimumTimedBidDurationMinutes>15</MinimumTimedBidDurationMinutes>
+  <MinimumTimedBidDurationMinutes>5</MinimumTimedBidDurationMinutes>
   <MaximumTimedBidDurationMinutes>10080</MaximumTimedBidDurationMinutes>
   <!-- OPTIONAL PEAK-HOUR PRICING: buyers pay the listed price plus this percentage during the peak window; sellers receive the listed price. -->
   <EnablePeakHourMarketPricing>false</EnablePeakHourMarketPricing>
@@ -49,6 +49,14 @@
   <EnableDiscordMarketWebhook>false</EnableDiscordMarketWebhook>
   <DiscordMarketWebhookUrl></DiscordMarketWebhookUrl>
   <DiscordMarketWebhookName>TROA-Hangar</DiscordMarketWebhookName>
+  <!-- PRIVATE PLAYER CONFIRMATIONS: in-game confirmations work without Discord and are enabled by default. -->
+  <EnableMarketInGameConfirmations>true</EnableMarketInGameConfirmations>
+  <!-- Discord DMs require a bot token and SteamID:DiscordUserID mappings because webhooks cannot send private messages. -->
+  <EnableDiscordMarketDirectMessages>false</EnableDiscordMarketDirectMessages>
+  <DiscordMarketBotToken></DiscordMarketBotToken>
+  <DiscordMarketPlayerMappings>
+    <!-- <string>76561198000000000:123456789012345678</string> -->
+  </DiscordMarketPlayerMappings>
   <!-- MARKET AUDIT WEBHOOK (PRIVATE ADMIN CHANNEL): leave disabled until you paste a complete Discord webhook URL. -->
   <EnableMarketAuditWebhook>false</EnableMarketAuditWebhook>
   <MarketAuditWebhookUrl></MarketAuditWebhookUrl>
