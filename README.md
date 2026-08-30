@@ -262,3 +262,4 @@ TROA-Hangar is intentionally **configuration- and command-based**. It does not r
 - **Why this helps:** No UI dependencies or client installation, fewer post-update compatibility issues, and simpler support across Windows, Linux, AMP, and Wine servers.
 
 This streamlined command-and-config approach keeps TROA-Hangar portable and easy for server administrators to maintain.
+
