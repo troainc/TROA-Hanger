@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TroaHangerConfig>
-  <!-- TROA-Hangar configuration. After editing your installed plugin config, run !hangeradmin reload in-game. -->
+  <!-- TROA-Hangar configuration. After editing your installed plugin config, run !hangaradmin reload in-game. -->
   <!-- Keep Discord webhook URLs private. Do not share them or include them in public releases. -->
   <!-- CORE STORAGE -->
   <Enabled>true</Enabled>
@@ -9,9 +9,9 @@
   <EnableTroaStorage>true</EnableTroaStorage>
   <!-- Cross-server storage is reserved for future support. -->
   <EnableCrossServerStorage>false</EnableCrossServerStorage>
-  <!-- KEEN GRID STORAGE (OPTIONAL): enable after binding a Keen Services Terminal with !hangeradmin terminalhere. -->
+  <!-- KEEN GRID STORAGE (OPTIONAL): enable after binding a Keen Services Terminal with !hangaradmin terminalhere. -->
   <EnableKeenGridStorage>false</EnableKeenGridStorage>
-  <!-- Set automatically by !hangeradmin terminalhere. Leave 0 if disabled. -->
+  <!-- Set automatically by !hangaradmin terminalhere. Leave 0 if disabled. -->
   <KeenGridStorageTerminalEntityId>0</KeenGridStorageTerminalEntityId>
   <!-- PLAYER AND GRID LIMITS: set MaxPlayerGrids, MaximumBlocksPerGrid, or MaximumPcuPerGrid to 0 for no limit. -->
   <MaxPlayerGrids>10</MaxPlayerGrids>

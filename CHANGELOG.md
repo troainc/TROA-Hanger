@@ -1,5 +1,14 @@
 # TROA-Hangar Changelog
 
+## v2.0.0-alpha.4.39 - Command Spelling Correction
+
+- Changes player commands from `!hanger` to the correctly spelled `!hangar`.
+- Changes administrator commands from `!hangeradmin` to `!hangaradmin`.
+- Changes faction commands from `!factionhanger` to `!factionhangar`.
+- Renames `!hangaradmin cleanhanger` to `!hangaradmin cleanhangar`.
+- Updates all README instructions and configuration tips to match the working in-game commands.
+- Keeps legacy plugin filenames and storage folders unchanged so existing server data upgrades safely.
+
 ## v2.0.0-alpha.4.38 - Market Lifecycle
 
 - Allows players to buy active live listings until their configured deadline.
