@@ -125,6 +125,72 @@ Type these in **Space Engineers in-game chat**. Player commands do not require T
 - A listed grid stays in market custody until it is cancelled, purchased, settled, or returned after expiry.
 
 
+## Blackmarket setup and use
+
+The Blackmarket is an optional, access-controlled part of the same market system. It is disabled by default.
+
+### Server-owner setup
+
+Add or update these settings in `TROA-Hanger.cfg`:
+
+```xml
+<EnableBlackmarket>true</EnableBlackmarket>
+<BlackmarketListingFeeCredits>5000</BlackmarketListingFeeCredits>
+<BlackmarketRevenueFactionTag>ADMIN</BlackmarketRevenueFactionTag>
+<BlackmarketAccessSteamIds>
+  <string>76561198000000001</string>
+  <string>76561198000000002</string>
+</BlackmarketAccessSteamIds>
+```
+
+Then run:
+
+```text
+!hangaradmin reload
+```
+
+Setting behavior:
+
+- `EnableBlackmarket` turns Blackmarket commands and protected purchases on or off.
+- `BlackmarketAccessSteamIds` is a Steam ID64 allowlist. An empty list allows every player; a populated list allows only those entries.
+- `BlackmarketListingFeeCredits` is charged once when a normal listing is moved into the Blackmarket. Use `0` for no fee.
+- `BlackmarketRevenueFactionTag` receives listing fees through the Space Engineers economy. If the fee cannot be collected or deposited, the listing is returned to the normal market instead of being left in a partial state.
+
+### Player workflow
+
+1. Store and list a grid normally:
+   ```text
+   !hangar market offer <grid-number> <price>
+   ```
+2. Move that listing into a Blackmarket category:
+   ```text
+   !blackmarket listoffer <market-id> <category>
+   ```
+   Example:
+   ```text
+   !blackmarket listoffer K7X4Q Restricted
+   ```
+3. Eligible players browse Blackmarket listings:
+   ```text
+   !blackmarket list
+   ```
+4. Eligible players bid on timed listings or buy live listings using the normal Market ID:
+   ```text
+   !hangar bid <market-id> <credits>
+   !hangar buy <market-id>
+   ```
+
+Blackmarket access is checked again when bidding or purchasing, so knowing a Market ID does not bypass the allowlist.
+
+### Privacy, Discord, LCDs, and auditing
+
+- Player-facing Blackmarket lists and Discord posts identify the seller as **Anonymous**.
+- Full seller Steam IDs, category, fee, action, and Market ID remain in the private local market audit for staff recovery and investigation.
+- Blackmarket listings are excluded from the normal public market list, public search results, and Nexus public catalog broadcasts.
+- When the market webhook is enabled, new Blackmarket listings generate an anonymous Discord embed using the existing `DiscordMarketWebhookName`.
+- Name an LCD block `[HANGAR+ BLACKMARKET]`, or add `[Hangar+ Blackmarket Display]` to Custom Data, to show the Blackmarket feed.
+- LCD visibility is physical rather than player-specific. Place Blackmarket LCDs inside secured areas if the listing feed should not be visible to everyone who can approach the screen.
+
 ## In-game LCD and trade-station setup
 
 Hangar+ uses ordinary Space Engineers text-surface blocks. Players do not install a client mod, programmable-block script, or custom UI.
