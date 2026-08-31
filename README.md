@@ -125,9 +125,64 @@ Type these in **Space Engineers in-game chat**. Player commands do not require T
 - A listed grid stays in market custody until it is cancelled, purchased, settled, or returned after expiry.
 
 
-## In-game LCD and trade-station displays
+## In-game LCD and trade-station setup
 
-The default tags are `[HANGAR+ MARKET]`, `[HANGAR+ BLACKMARKET]`, and `[HANGAR+ COMMODITY]`. The plugin writes paged feeds to existing Space Engineers text surfaces; no client mod or custom UI is installed. Changing the brand with `!hangaradmin name <display-name>` updates the normal market tag. Legacy TROA-prefixed tags remain recognized so upgrades do not break existing station blocks.
+Hangar+ uses ordinary Space Engineers text-surface blocks. Players do not install a client mod, programmable-block script, or custom UI.
+
+### Quick setup
+
+1. Confirm `EnableMarketLcdDisplays` is `true` in `TROA-Hanger.cfg`.
+2. Run `!hangaradmin reload` after changing the configuration.
+3. Place an LCD panel or another block that provides a text surface.
+4. Rename the block with one of these tags:
+   - `[HANGAR+ MARKET]` — public ship and grid listings.
+   - `[HANGAR+ BLACKMARKET]` — Blackmarket listings.
+   - `[HANGAR+ COMMODITY]` — commodity sell listings and buy orders.
+5. Wait for the configured refresh interval. Hangar+ automatically changes the surface to text-and-image mode and writes the matching market feed.
+
+Examples:
+
+```text
+Trade Station [HANGAR+ MARKET]
+Restricted Exchange [HANGAR+ BLACKMARKET]
+Ore Prices [HANGAR+ COMMODITY]
+```
+
+The tag can appear anywhere in the block's Custom Name. A matching block with multiple text surfaces receives the feed on every surface, so use a dedicated display block if you do not want its other surfaces replaced.
+
+### Custom Data alternative
+
+Instead of renaming the block, add one marker to its Custom Data:
+
+```text
+[Hangar+ Market Display]
+```
+
+```text
+[Hangar+ Blackmarket Display]
+```
+
+```text
+[Hangar+ Commodity Display]
+```
+
+For a normal market display, adding `Enabled=false` disables updates without removing the Custom Data marker.
+
+### Branding and refresh settings
+
+```xml
+<InGameDisplayName>Hangar+</InGameDisplayName>
+<EnableMarketLcdDisplays>true</EnableMarketLcdDisplays>
+<MarketLcdNameTag>[HANGAR+ MARKET]</MarketLcdNameTag>
+<MarketLcdRefreshSeconds>15</MarketLcdRefreshSeconds>
+<MarketLcdRowsPerPage>10</MarketLcdRowsPerPage>
+```
+
+Use `!hangaradmin name <display-name>` to change the player-facing brand. For example, `!hangaradmin name Orion Exchange` changes the generated normal-market tag to `[ORION EXCHANGE MARKET]`; the corresponding Blackmarket and commodity tags become `[ORION EXCHANGE BLACKMARKET]` and `[ORION EXCHANGE COMMODITY]`.
+
+If you edit `InGameDisplayName` directly, also update `MarketLcdNameTag` for the public market display. Discord is unaffected: it continues using `DiscordMarketWebhookName`.
+
+LCD pages rotate automatically when listings exceed `MarketLcdRowsPerPage`. The refresh interval has a five-second minimum. Older TROA-prefixed LCD names remain recognized for upgrade compatibility.
 
 ## Server Owner Commands
 
