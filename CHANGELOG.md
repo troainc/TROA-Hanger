@@ -1,4 +1,18 @@
-# TROA-Hangar Changelog
+# Hangar+ Changelog
+
+## Unreleased - Hangar+ Market Expansion
+
+- Adds explicit market transaction states and a durable recovery journal.
+- Adds server-driven LCD and trade-station feeds using existing text surfaces; no client UI is required.
+- Adds market search, filtering, categories, and station-specific listings.
+- Adds access-controlled Blackmarket listings, fees, anonymous presentation, and local auditing.
+- Adds optional Nexus v3 discovery, read-only catalog synchronization, and locked cross-server purchases.
+- Adds physical commodity sell custody, escrowed buy orders, claimable vaults, reputation, and analytics.
+- Expands the optional Discord market webhook to grid-market, Blackmarket, commodity, and cross-server lifecycle events.
+- Uses **Hangar+** as the default in-game identity and adds `!hangaradmin name <display-name>`.
+- Keeps `DiscordMarketWebhookName` independent so established Discord webhook names remain unchanged.
+- Retains legacy filenames, storage paths, Nexus identifiers, record values, and LCD tags for upgrade compatibility.
+- Builds for .NET Framework 4.8 with zero warnings and zero errors.
 
 ## v2.0.0-alpha.4.39 - Command Spelling Correction
 
