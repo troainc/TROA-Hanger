@@ -368,6 +368,10 @@ TROA-HangerData/
 - Keen Services Terminal integration is optional and must be bound by an administrator.
 - TROA Discord Monitor is optional; standalone market embeds work without it.
 
+## TROA Econ+ integration
+
+[TROA Econ+](https://github.com/troainc/TROA-Econ-Plus) is the optional economy companion for Hangar+. Econ+ provides durable credit holds, captures, refunds, treasury policy, and recovery through a versioned server-side API while Hangar+ remains responsible for grids and market custody. The Econ+ contract is available in its current alpha foundation; the optional Hangar+ adapter is a planned integration and Econ+ is not required for standalone Hangar+ operation.
+
 ## Alpha Notice
 
 This is active alpha development. Test it on a development server and back up your world, plugin config, and `TROA-HangerData` before production deployment. Nexus cross-server purchasing and in-game text-surface market feeds are now implemented; alliance market escrow and automated cleanup remain outside the current scope.
